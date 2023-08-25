@@ -40,10 +40,9 @@ eval_dataloader = DataLoader(
 
 ## Step 3 - Config Model with optimizer
 optimizer = AdamW(model.parameters(), lr=5e-5)
-num_epochs = 1
-## num_training_steps = num_epochs * len(train_dataloader)
-
-num_training_steps = (int)(num_epochs * (len(train_dataloader)/4))  # to speed up
+num_epochs = 3
+num_training_steps = num_epochs * len(train_dataloader)
+#num_training_steps = (int)(num_epochs * (len(train_dataloader)/4))  # to speed up
 
 lr_scheduler = get_scheduler(
     "linear",
