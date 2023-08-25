@@ -1,9 +1,11 @@
 from transformers import pipeline
+
+
 import sys
 import pandas as pd
 
-pipe = pipeline("table-question-answering",
-                model="google/tapas-medium-finetuned-wtq")
+pipe = pipeline("table-question-answering",model="google/tapas-medium-finetuned-wtq")
+
 
 data = {
     "customer": ["C001", "COO2", "COO2", "C002"],
@@ -64,8 +66,8 @@ for headerIndex in range(len(content["header"])):
 
 print("Speak your mind > ")
 for input in sys.stdin:
-    query = [{"table": column_store, "query": input.strip()}]
-    result = pipe(query)
+    #query = [{"table": column_store, "query": input.strip()}]
+    result = pipe(table=column_store, query=input.strip())
     print(result)
     for r in result:
         print(r)
