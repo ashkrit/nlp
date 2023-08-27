@@ -1,0 +1,1 @@
+global_counter = 0
