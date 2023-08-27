@@ -1,9 +1,12 @@
 import lancedb
+import sys
 
 uri = "~/_data/vector/data/sample-lancedb"
 db = lancedb.connect(uri)
 
 tnames = db.table_names()
+
+print(sys.path)
 
 
 
