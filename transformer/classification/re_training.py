@@ -5,6 +5,7 @@ import torch
 from transformers import Trainer, TrainingArguments
 from sklearn.metrics import accuracy_score, f1_score
 from transformers import AutoModelForSequenceClassification
+from datetime import datetime
 
 ## Tokenizer 
 model_ckpt = "distilbert-base-uncased"
@@ -38,9 +39,10 @@ emotions_encoded = emotions.map(tokenize, batched=True, batch_size=None)
 
 batch_size = 64
 logging_steps = len(emotions_encoded["train"]) // batch_size
-model_name = f"{model_ckpt}-finetuned-emotion"
-output_location="~/_tmp/model/finetuned-emotion"
-training_args = TrainingArguments(output_dir=output_location,
+ts_label=datetime.today().strftime('%y%m%d_%H%M%S')
+model_name = f"/Users/ashkrit/_tmp/model/{model_ckpt}-finetuned-emotion-{ts_label}"
+
+training_args = TrainingArguments(output_dir=model_name,
                                   num_train_epochs=2,
                                   learning_rate=2e-5,
                                   per_device_train_batch_size=batch_size,
@@ -64,6 +66,7 @@ tresult=trainer.train();
 
 print(f"Training results {tresult}")
 
+output_location="/Users/ashkrit/_tmp/model/finetuned-emotion"
 print(f"Saving to disk {output_location}")
 
 trainer.save_model(output_location)
