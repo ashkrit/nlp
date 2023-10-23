@@ -44,9 +44,13 @@ if __name__ == "__main__":
         cosin_scores = util.cos_sim(query_embedding, corpus_embeddings)[0]
         top_results = torch.topk(cosin_scores, k=top_k)
 
-        logging.info("\n\n")
+        
+        logging.info("====================")
+        logging.info(top_results)
         logging.info(f"Query : {query}")
         logging.info(f"Matching result for {top_k} rows")
 
         for score , index in zip(top_results[0], top_results[1]):
             logging.info(f"{corpus[index]} \t {score}")
+
+    
