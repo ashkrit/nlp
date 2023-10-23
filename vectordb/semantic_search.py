@@ -1,17 +1,28 @@
+<<<<<<< HEAD
 from sentence_transformers import SentenceTransformer, util
 import logging
 import torch
+=======
+from sentence_transformers import SentenceTransformer,util
+import logging
+>>>>>>> a700d6fd0c0460821a647ada5f2f4e8421cbb17f
 
 
 logging.basicConfig(level=logging.INFO)
 
+<<<<<<< HEAD
 if __name__ == "__main__":
     model_name = "multi-qa-MiniLM-L6-cos-v1"
+=======
+if __name__ =="__main__":
+    model_name="multi-qa-MiniLM-L6-cos-v1"
+>>>>>>> a700d6fd0c0460821a647ada5f2f4e8421cbb17f
     model = SentenceTransformer(model_name)
     logging.info(model)
 
     query_embedding = model.encode('How big is London')
     passage_embedding = model.encode(['London has 9,787,426 inhabitants at the 2011 census',
+<<<<<<< HEAD
                                       'London is known for its finacial district'])
     scores = util.dot_score(query_embedding, passage_embedding)
     logging.info(f"Similarity: {scores}")
@@ -54,3 +65,8 @@ if __name__ == "__main__":
             logging.info(f"{corpus[index]} \t {score}")
 
     
+=======
+                                  'London is known for its finacial district'])
+    scores = util.dot_score(query_embedding, passage_embedding)
+    logging.info(f"Similarity: {scores}")
+>>>>>>> a700d6fd0c0460821a647ada5f2f4e8421cbb17f
