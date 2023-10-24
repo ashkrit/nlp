@@ -29,10 +29,13 @@ n_clusters = math.floor(4 * math.sqrt(max_corpus_size))
 def create_flat_index() -> faiss.IndexFlat:
     return faiss.IndexFlatL2(embedding_size)
 
+def create_flat_index_ip() -> faiss.IndexFlatIP:
+    return faiss.IndexFlatIP(embedding_size)
+
 #We use Inner Product (dot-product) as Index. We will normalize our vectors to unit length, then is Inner Product equal to cosine similarity
 #quantizer = faiss.IndexFlatIP(embedding_size)
 #index = faiss.IndexIVFFlat(quantizer, embedding_size, n_clusters, faiss.METRIC_INNER_PRODUCT)
-index = create_flat_index()
+index = create_flat_index_ip()
 
 
 #Check if embedding cache path exists
@@ -81,7 +84,7 @@ corpus_embeddings = corpus_embeddings / np.linalg.norm(corpus_embeddings, axis=1
 #index.nprobe = 3
 
 print("Start training the FAISS index")
-print(f"Training required {index}")
+print(f"is trained {index.is_trained}")
 
 # Then we train the index to find a suitable clustering
 #index.train(corpus_embeddings)
