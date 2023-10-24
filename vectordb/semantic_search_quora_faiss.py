@@ -5,6 +5,8 @@ import pickle
 import time
 import faiss
 import numpy as np
+import math
+
 
 
 model_name = 'quora-distilbert-multilingual'
@@ -12,7 +14,7 @@ model = SentenceTransformer(model_name)
 
 url = "http://qim.fs.quoracdn.net/quora_duplicate_questions.tsv"
 dataset_path = "quora_duplicate_questions.tsv"
-max_corpus_size = 15000
+max_corpus_size = 10000
 
 embedding_cache_path = 'quora-embeddings-{}-size-{}.pkl'.format(model_name.replace('/', '_'), max_corpus_size)
 
@@ -22,12 +24,15 @@ top_k_hits = 10         #Output k hits
 
 #Defining our FAISS index
 #Number of clusters used for faiss. Select a value 4*sqrt(N) to 16*sqrt(N) - https://github.com/facebookresearch/faiss/wiki/Guidelines-to-choose-an-index
-n_clusters = 300
+n_clusters = math.floor(4 * math.sqrt(max_corpus_size))
+
+def create_flat_index() -> faiss.IndexFlat:
+    return faiss.IndexFlatL2(embedding_size)
 
 #We use Inner Product (dot-product) as Index. We will normalize our vectors to unit length, then is Inner Product equal to cosine similarity
-quantizer = faiss.IndexFlatIP(embedding_size)
-index = faiss.IndexIVFFlat(quantizer, embedding_size, n_clusters, faiss.METRIC_INNER_PRODUCT)
-
+#quantizer = faiss.IndexFlatIP(embedding_size)
+#index = faiss.IndexIVFFlat(quantizer, embedding_size, n_clusters, faiss.METRIC_INNER_PRODUCT)
+index = create_flat_index()
 
 
 #Check if embedding cache path exists
@@ -73,11 +78,15 @@ corpus_embeddings = corpus_embeddings / np.linalg.norm(corpus_embeddings, axis=1
 
 
 #Number of clusters to explorer at search time. We will search for nearest neighbors in 3 clusters.
-index.nprobe = 3
+#index.nprobe = 3
+
+print("Start training the FAISS index")
+print(f"Training required {index}")
 
 # Then we train the index to find a suitable clustering
-index.train(corpus_embeddings)
+#index.train(corpus_embeddings)
 
+print("Start adding embeddings to the FAISS index")
 # Finally we add all embeddings to the index
 index.add(corpus_embeddings)
 
