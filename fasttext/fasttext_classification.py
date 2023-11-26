@@ -8,9 +8,10 @@ import os
 
 logging.basicConfig(level=logging.INFO)
 
-training_file= sys.argv[1]
-model_location= sys.argv[2]
+model_location= sys.argv[1]
 model_output_file=f"{model_location}/cooking.model.bin"
+training_file=f"{model_location}/cooking.train"
+validation_file=f"{model_location}/cooking.valid"
 
 
 def loadOrBuild(training_file:str,model_file:str) -> fasttext.FastText:
@@ -18,7 +19,9 @@ def loadOrBuild(training_file:str,model_file:str) -> fasttext.FastText:
         logging.info(f"Model {model_output_file} exists")
         return fasttext.load_model(model_output_file)
     else:    
-        model = fasttext.train_supervised(input=training_file)
+        #model = fasttext.train_supervised(input=training_file)
+        #model = fasttext.train_supervised(input=training_file,lr=1.0, epoch=25, wordNgrams=2)
+        model = fasttext.train_supervised(input=training_file,lr=1.0, epoch=25, wordNgrams=2,bucket=200000, dim=50, loss='hs')
         logging.info(f"Model {model}")
         logging.info(f"Model is saved @ {model_output_file}")
         logging.info(f"Model words: {len(model.get_words())} ")
@@ -29,8 +32,12 @@ def loadOrBuild(training_file:str,model_file:str) -> fasttext.FastText:
 
 model=loadOrBuild(training_file,model_location)
 
+result = model.test(validation_file)
+
+logging.info(f"Model accuracy: {result}")
+
 while True:
     inp_question = input("Please enter a question: ")
-    results = model.predict(inp_question)
+    results = model.predict(inp_question, 5)
     logging.info(f"Results: \n {results}")
     print("\n")
