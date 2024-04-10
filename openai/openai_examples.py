@@ -8,7 +8,7 @@ def get_embedding(text, model="text-embedding-3-small"):
    text = text.replace("\n", " ")
    return client.embeddings.create(input = [text], model=model).data[0].embedding
 
-client = OpenAI(api_key=os.getenv("OPENAI_TOKEN"))
+client = OpenAI(api_key=os.getenv("OPENAI_TOKEN")})
 
 base_path="~/Downloads/"
 df = pd.read_csv(f"{base_path}/Amazon_Review/Reviews.csv" , index_col=0)
