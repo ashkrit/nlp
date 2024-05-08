@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 tokenizer = AutoTokenizer.from_pretrained('btan2/cappy-large')
 cappy = AutoModelForSequenceClassification.from_pretrained('btan2/cappy-large')
 
-## new function to calluclate score based on instruction and response
+## new function to calculate score based on instruction and response
 def calculate_score(instruction, response) -> float:
     inputs = tokenizer([(instruction, response), ], return_tensors='pt')
     score = cappy(**inputs).logits[0][0].item()
